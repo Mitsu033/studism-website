@@ -57,6 +57,13 @@ ${message}
 送信日時: ${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}
     `.trim();
 
+    // Debug logs
+    console.log('Environment variables:', {
+      from: process.env.CONTACT_EMAIL_FROM,
+      to: process.env.CONTACT_EMAIL_TO,
+      hasApiKey: !!process.env.RESEND_API_KEY
+    });
+
     // Send email
     const { data, error } = await resend.emails.send({
       from: process.env.CONTACT_EMAIL_FROM,
@@ -64,6 +71,8 @@ ${message}
       subject: `【Studism】お問い合わせ - ${categoryDisplay}`,
       text: emailContent,
     });
+
+    console.log('Email send result:', { data, error });
 
     if (error) {
       console.error('Resend error:', error);
